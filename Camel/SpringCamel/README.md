@@ -13,3 +13,6 @@ run as a docker environment with:
 mvn fabric8:run
 or
 mvn fabric8:deploy (or undeploy)
+
+Tail the logs with kubectl logs <pod name>
+or mvn fabric8:log
