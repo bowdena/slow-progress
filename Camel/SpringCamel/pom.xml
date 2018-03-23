@@ -3,7 +3,7 @@
 
 	<groupId>com.example</groupId>
 	<artifactId>demo</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>demo</name>
@@ -28,6 +28,17 @@
 			<artifactId>camel-spring-boot-starter</artifactId>
 			<version>2.21.0</version>
 		</dependency>
+		<!-- start activemq -->
+		<!-- http://www.devglan.com/spring-boot/spring-boot-jms-activemq-example -->
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-activemq</artifactId>
+    </dependency>
+		<dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-broker</artifactId>
+    </dependency>
+		<!-- end activemq -->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -39,11 +50,11 @@
 			<artifactId>camel-test-spring</artifactId>
 			<version>2.21.0</version>
 			<scope>test</scope>
-		</dependency> 
-		
+		</dependency>
+
 	</dependencies>
-	
-	
+
+
 
 	<build>
 		<plugins>
