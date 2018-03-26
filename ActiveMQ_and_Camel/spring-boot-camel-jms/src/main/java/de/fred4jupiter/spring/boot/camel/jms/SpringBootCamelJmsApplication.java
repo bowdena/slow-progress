@@ -2,6 +2,8 @@ package de.fred4jupiter.spring.boot.camel.jms;
 
 import org.apache.activemq.camel.component.ActiveMQComponent;
 import org.apache.activemq.pool.PooledConnectionFactory;
+import org.apache.activemq.security.AuthenticationUser;
+import org.apache.activemq.security.SimpleAuthenticationPlugin;
 import org.apache.activemq.spring.ActiveMQConnectionFactory;
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
@@ -14,7 +16,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.apache.activemq.broker.BrokerPlugin;
 import org.apache.activemq.broker.BrokerService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.jms.ConnectionFactory;
 
@@ -64,6 +70,8 @@ public class SpringBootCamelJmsApplication {
     public ActiveMQConnectionFactory coreConnectionFactory() {
         ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
         connectionFactory.setBrokerURL("vm://localhost?broker.persistent=false");
+        connectionFactory.setUserName("admin");
+        connectionFactory.setPassword("admin");
         return connectionFactory;
     }
 
@@ -83,6 +91,14 @@ public class SpringBootCamelJmsApplication {
     }
 
     public static void main(String[] args) throws Exception {
+    	// Trying to add users
+    	List<AuthenticationUser> users = new ArrayList<>();
+    	users.add(new AuthenticationUser("ab", "ab", "admin"));
+    	users.add(new AuthenticationUser("admin", "admin", "admin"));
+    	SimpleAuthenticationPlugin plugin = new SimpleAuthenticationPlugin(users);
+    	BrokerPlugin[] plugins = new BrokerPlugin[] { plugin };
+    	
+    	
       // Modified based on
       // https://examples.javacodegeeks.com/enterprise-java/jms/apache-activemq-brokerservice-example/
       //  http://activemq.apache.org/how-do-i-embed-a-broker-inside-a-connection.html
@@ -90,8 +106,12 @@ public class SpringBootCamelJmsApplication {
       BrokerService broker = new BrokerService();
       broker.setUseJmx(true);
       broker.addConnector("tcp://localhost:61616");
+      
+      // add the users
+      broker.setPlugins(plugins);
+      
       broker.start();
-                  System.out.println("Broker Started!!!");
+      System.out.println("Broker Started!!!");
       // now lets wait forever to avoid the JVM terminating immediately
       /*Object lock = new Object();
       synchronized (lock) {
