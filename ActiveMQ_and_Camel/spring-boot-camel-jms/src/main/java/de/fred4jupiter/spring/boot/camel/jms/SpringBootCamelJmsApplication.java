@@ -89,6 +89,10 @@ public class SpringBootCamelJmsApplication {
         component.setConfiguration(jmsConfiguration);
         return component;
     }
+    
+    
+    
+    
 
     public static void main(String[] args) throws Exception {
     	// Trying to add users
