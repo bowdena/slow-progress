@@ -8,34 +8,14 @@ WORKDIR /opt/karaf/
 RUN tar --strip-components=1 -C /opt/karaf -xzf apache-karaf-${KARAF_VERSION}.tar.gz;
 WORKDIR /opt/karaf/
 RUN bin/start && \
-#allow the Karaf process to start
-sleep 10 && \
-#install camel repo url and version
-bin/client feature:repo-add camel 2.15.1 && \
-#allow feature url installation to complete
-sleep 5 && \
-#install camel core
-bin/client feature:install camel
-RUN sleep 10
-RUN bin/start && \
-#allow the Karaf process to start
-sleep 10 && \
-#install camel repo url and version
-bin/client feature:repo-add camel 2.15.1 && \
-#allow feature url installation to complete
-sleep 5 && \
-#install camel core
-bin/client feature:install camel
-RUN sleep 10
-RUN bin/start && \
-#allow the Karaf process to start
-sleep 10 && \
-#install hawtio repo url and version
-bin/client feature:repo-add hawtio 1.4.58 && \
-#allow feature url installation to complete
-sleep 5 && \
-#install hawtio
-bin/client feature:install hawtio
+	sleep 10 && \
+	bin/client feature:repo-add camel 2.15.1 && \
+	sleep 5 && \
+	bin/client feature:install camel && \
+	sleep 10 && \
+	bin/client feature:repo-add hawtio 1.4.58 && \
+	sleep 5 && \
+	bin/client feature:install hawtio
 #COPY /config/org.ops4j.pax.logging.cfg /opt/karaf/etc/
 EXPOSE 8181
 ENTRYPOINT ["/opt/karaf/bin/karaf", "start"]
